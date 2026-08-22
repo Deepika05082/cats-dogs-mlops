@@ -1,0 +1,24 @@
+name: CI Pipeline
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: Install dependencies
+        run: pip install -r requirements.txt pytest
+      - name: Run unit tests
+        run: pytest tests/
+      - name: Build Docker image
+        run: docker build -t catsdogs:latest .
+      - name: Push to DockerHub
+        run: |
+          echo ${{ secrets.DOCKER_PASS }} | docker login -u ${{ secrets.DOCKER_USER }} --password-stdin
+          docker tag catsdogs:latest myrepo/catsdogs:latest
+          docker push myrepo/catsdogs:latest

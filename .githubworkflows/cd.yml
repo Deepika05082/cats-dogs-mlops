@@ -1,0 +1,27 @@
+name: CD Pipeline
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: 'v1.29.0'
+      - name: Configure Minikube context
+        run: |
+          minikube start --driver=docker
+          kubectl config use-context minikube
+      - name: Deploy to Minikube
+        run: kubectl apply -f k8s.yaml
+      - name: Smoke Test
+        run: |
+          kubectl wait --for=condition=available --timeout=60s deployment/catsdogs-deploy
+          kubectl port-forward svc/catsdogs-svc 8080:80 &
+          sleep 5
+          curl http://localhost:8080/health
