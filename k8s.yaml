@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: catsdogs
-        image: catsdogs:latest
+        image: cats-dogs-mlops:latest
         imagePullPolicy: Never
         ports:
         - containerPort: 8000
