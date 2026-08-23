@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/WorkArea/MLops/MlopsAssignment-2/cats-dogs-mlops/mlruns/0/4b90efa0c91443acaaf140886b731501/artifacts
+end_time: 1787430455496
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 4b90efa0c91443acaaf140886b731501
+run_name: enchanting-mule-629
+run_uuid: 4b90efa0c91443acaaf140886b731501
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1787430141438
+status: 3
+tags: []
+user_id: Acer

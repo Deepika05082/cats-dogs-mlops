@@ -14,7 +14,8 @@ spec:
     spec:
       containers:
       - name: catsdogs
-        image: myrepo/catsdogs:latest
+        image: catsdogs:latest
+        imagePullPolicy: Never
         ports:
         - containerPort: 8000
 ---

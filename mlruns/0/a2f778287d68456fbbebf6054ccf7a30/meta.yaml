@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/WorkArea/MLops/MlopsAssignment-2/cats-dogs-mlops/mlruns/0/a2f778287d68456fbbebf6054ccf7a30/artifacts
+end_time: 1787439867556
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: a2f778287d68456fbbebf6054ccf7a30
+run_name: vaunted-roo-37
+run_uuid: a2f778287d68456fbbebf6054ccf7a30
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1787436304411
+status: 3
+tags: []
+user_id: Acer
