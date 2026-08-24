@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/WorkArea/MLops/MlopsAssignment-2/cats-dogs-mlops/mlruns/0/a920144cd2694cb7a7cd1a4a477fa61a/artifacts
+end_time: null
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: a920144cd2694cb7a7cd1a4a477fa61a
+run_name: cats-dogs-cnn
+run_uuid: a920144cd2694cb7a7cd1a4a477fa61a
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1787567846844
+status: 1
+tags: []
+user_id: Acer
