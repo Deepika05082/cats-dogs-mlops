@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/WorkArea/MLops/MlopsAssignment-2/cats-dogs-mlops/mlruns/0/28bde5413a75412a9f2ef027ab5ef2f5/artifacts
+end_time: 1787526448321
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 28bde5413a75412a9f2ef027ab5ef2f5
+run_name: overjoyed-duck-553
+run_uuid: 28bde5413a75412a9f2ef027ab5ef2f5
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1787521737492
+status: 3
+tags: []
+user_id: Acer
