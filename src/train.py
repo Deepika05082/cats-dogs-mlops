@@ -119,5 +119,3 @@ with mlflow.start_run(run_name="cats-dogs-cnn"):
         mlflow.log_artifact(str(confusion_matrix_path), artifact_path="plots")
     mlflow.pytorch.log_model(model, "model")
 
-
-
