@@ -66,14 +66,17 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Set lowercase image name
+        run: echo "IMAGE_NAME=ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/cats-dogs-mlops" >> "$GITHUB_ENV"
+
       - name: Build and publish Docker image
         uses: docker/build-push-action@v6
         with:
           context: .
           push: true
           tags: |
-            ghcr.io/${{ github.repository_owner }}/cats-dogs-mlops:latest
-            ghcr.io/${{ github.repository_owner }}/cats-dogs-mlops:${{ github.sha }}
+            ${{ env.IMAGE_NAME }}:latest
+            ${{ env.IMAGE_NAME }}:${{ github.sha }}
 
   deploy-minikube:
     name: Deploy to local Minikube
