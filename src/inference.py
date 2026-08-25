@@ -5,12 +5,14 @@ from PIL import Image
 import torchvision.transforms as T
 import logging
 import time
+import os
 from prometheus_fastapi_instrumentator import Instrumentator
 from fastapi.responses import HTMLResponse
 from src.model import SimpleCNN   # keep only one import
 from pathlib import Path
 
 app = FastAPI()
+CONFIDENCE_THRESHOLD = float(os.getenv("CONFIDENCE_THRESHOLD", "0.8"))
 
 # Load both the current state-dict format and older full-model checkpoints.
 model = SimpleCNN()
@@ -49,10 +51,13 @@ async def predict(file: UploadFile):
     img = Image.open(file.file).convert("RGB")
     x = transform(img).unsqueeze(0)
     with torch.no_grad():
-        y = model(x).argmax().item()
-    prediction = "cat" if y == 0 else "dog"
-    logging.info("prediction class=%s", prediction)
-    return {"prediction": prediction}
+        probabilities = torch.softmax(model(x), dim=1)[0]
+    confidence, class_index = probabilities.max(0)
+    prediction = "cat" if class_index.item() == 0 else "dog"
+    if confidence.item() < CONFIDENCE_THRESHOLD:
+        prediction = "unknown"
+    logging.info("prediction class=%s confidence=%.3f", prediction, confidence.item())
+    return {"prediction": prediction, "confidence": round(confidence.item(), 4)}
 
 Instrumentator().instrument(app).expose(app)
 

@@ -21,7 +21,10 @@ def collect_samples(data_path: Path, samples_per_class: int, seed: int):
 
 
 def calculate_metrics(results):
-    confusion = {"cat": {"cat": 0, "dog": 0}, "dog": {"cat": 0, "dog": 0}}
+    confusion = {
+        "cat": {"cat": 0, "dog": 0, "unknown": 0},
+        "dog": {"cat": 0, "dog": 0, "unknown": 0},
+    }
     for result in results:
         confusion[result["true_label"]][result["predicted_label"]] += 1
 
@@ -32,7 +35,11 @@ def calculate_metrics(results):
     for label in LABELS.values():
         true_positive = confusion[label][label]
         false_positive = sum(confusion[other][label] for other in LABELS.values() if other != label)
-        false_negative = sum(confusion[label][other] for other in LABELS.values() if other != label)
+        false_negative = sum(
+            confusion[label][other]
+            for other in (*LABELS.values(), "unknown")
+            if other != label
+        )
         precision_values.append(true_positive / (true_positive + false_positive) if true_positive + false_positive else 0)
         recall_values.append(true_positive / (true_positive + false_negative) if true_positive + false_negative else 0)
 
