@@ -10,13 +10,13 @@ LABELS = {"Cat": "cat", "Dog": "dog"}
 
 
 def collect_samples(data_path: Path, samples_per_class: int, seed: int):
-    random_generator = random.Random(seed)
+    generator = random.Random(seed)
     samples = []
     for folder_name, label in LABELS.items():
         files = [path for path in (data_path / folder_name).iterdir() if path.is_file()]
         if len(files) < samples_per_class:
             raise ValueError(f"Not enough images in {data_path / folder_name}")
-        samples.extend((path, label) for path in random_generator.sample(files, samples_per_class))
+        samples.extend((path, label) for path in generator.sample(files, samples_per_class))
     return samples
 
 
@@ -29,7 +29,10 @@ def calculate_metrics(results):
         confusion[result["true_label"]][result["predicted_label"]] += 1
 
     total = len(results)
-    correct = sum(result["true_label"] == result["predicted_label"] for result in results)
+    correct = sum(
+        result["true_label"] == result["predicted_label"]
+        for result in results
+    )
     precision_values = []
     recall_values = []
     for label in LABELS.values():
@@ -40,8 +43,16 @@ def calculate_metrics(results):
             for other in (*LABELS.values(), "unknown")
             if other != label
         )
-        precision_values.append(true_positive / (true_positive + false_positive) if true_positive + false_positive else 0)
-        recall_values.append(true_positive / (true_positive + false_negative) if true_positive + false_negative else 0)
+        precision_values.append(
+            true_positive / (true_positive + false_positive)
+            if true_positive + false_positive
+            else 0
+        )
+        recall_values.append(
+            true_positive / (true_positive + false_negative)
+            if true_positive + false_negative
+            else 0
+        )
 
     return {
         "sample_count": total,

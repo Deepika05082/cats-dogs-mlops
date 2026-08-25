@@ -1,20 +1,21 @@
-from fastapi import FastAPI, UploadFile
-from fastapi import Request
-import torch
-from PIL import Image
-import torchvision.transforms as T
+import os
 import logging
 import time
-import os
-from prometheus_fastapi_instrumentator import Instrumentator
-from fastapi.responses import HTMLResponse
-from src.model import SimpleCNN   # keep only one import
 from pathlib import Path
+
+import torch
+import torchvision.transforms as T
+from fastapi import FastAPI, Request, UploadFile
+from fastapi.responses import HTMLResponse
+from PIL import Image
+from prometheus_fastapi_instrumentator import Instrumentator
+
+from src.model import SimpleCNN
 
 app = FastAPI()
 CONFIDENCE_THRESHOLD = float(os.getenv("CONFIDENCE_THRESHOLD", "0.8"))
 
-# Load both the current state-dict format and older full-model checkpoints.
+
 model = SimpleCNN()
 checkpoint_path = Path(__file__).resolve().parent.parent / "model.pt"
 checkpoint = torch.load(checkpoint_path, map_location="cpu")
@@ -24,7 +25,7 @@ else:
     model.load_state_dict(checkpoint)
 model.eval()
 
-transform = T.Compose([T.Resize((224,224)), T.ToTensor()])
+transform = T.Compose([T.Resize((224, 224)), T.ToTensor()])
 
 logging.basicConfig(level=logging.INFO)
 
@@ -48,10 +49,10 @@ def health():
 
 @app.post("/predict")
 async def predict(file: UploadFile):
-    img = Image.open(file.file).convert("RGB")
-    x = transform(img).unsqueeze(0)
+    image = Image.open(file.file).convert("RGB")
+    image_tensor = transform(image).unsqueeze(0)
     with torch.no_grad():
-        probabilities = torch.softmax(model(x), dim=1)[0]
+        probabilities = torch.softmax(model(image_tensor), dim=1)[0]
     confidence, class_index = probabilities.max(0)
     prediction = "cat" if class_index.item() == 0 else "dog"
     if confidence.item() < CONFIDENCE_THRESHOLD:
